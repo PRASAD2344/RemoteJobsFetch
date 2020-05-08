@@ -1,3 +1,5 @@
+//docker run -p 2344:2344 -d rjobpull
+//docker build -t rjobpull .
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
