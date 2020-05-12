@@ -58,7 +58,6 @@ function getCorrespondingItem(item){
   return {
     title: item.title.replace(/[\n\r\t]/g,''),
     link: item.link,
-    pubDate: moment(item.pubDate),
   }
 }
 
