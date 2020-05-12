@@ -9,6 +9,7 @@ var Parser = require('rss-parser');
 var parser = new Parser();
 var app = express();
 var moment = require('moment');
+var _ = require('lodash')
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,6 +26,10 @@ app.use('/', async (req,res) => {
 
     let remoteOkItems = await remoteOk();
     response.push(...remoteOkItems);
+
+    response = _.orderBy(response, o => {
+      return moment(o.pubDate);
+    },['asc']);
 
     res.status(200).send(response);
   }catch(ex){
@@ -53,6 +58,7 @@ function getCorrespondingItem(item){
   return {
     title: item.title.replace(/[\n\r\t]/g,''),
     link: item.link,
+    pubDate: moment(item.pubDate),
   }
 }
 
