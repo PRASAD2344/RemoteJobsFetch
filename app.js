@@ -24,8 +24,8 @@ app.use('/', async (req,res) => {
     let weWorkItems = await weWorkRemote();
     response.push(...weWorkItems);
 
-    //let remoteOkItems = await remoteOk();
-    //response.push(...remoteOkItems);
+    let remoteOkItems = await remoteOk();
+    response.push(...remoteOkItems);
 
     response = _.orderBy(response, o => {
       return moment(o.pubDate);

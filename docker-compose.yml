@@ -1,0 +1,6 @@
+version: "3.9"
+services:
+  remote-job-fetch:
+    build: .
+    ports:
+      - "2344:2344"
