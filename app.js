@@ -21,11 +21,11 @@ app.use('/', async (req,res) => {
   try{
     let response = [];
 
-    let weWorkItems = await weWorkRemote();
-    response.push(...weWorkItems);
+    let [weWorkItems, remoteOkItems, stackOverFlowJobs] = await Promise.all([weWorkRemote(), remoteOk(), stackOverFlow()]);
 
-    let remoteOkItems = await remoteOk();
+    response.push(...weWorkItems);
     response.push(...remoteOkItems);
+    response.push(...stackOverFlowJobs);
 
     response = _.orderBy(response, o => {
       return moment(o.pubDate);
@@ -44,6 +44,14 @@ async function remoteOk(){
   return feed.items
             .filter(o => now.diff(moment(o.pubDate), 'hours') <= 24)
             .map(getCorrespondingItem);
+}
+
+async function stackOverFlow(){
+  let now = moment(new Date());
+  let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?&r=true&tl=java+node.js+spring&s=44000&c=USD&j=Permanent&j=Contract&sort=p');
+  return feed.items
+      .filter(o => now.diff(moment(o.pubDate), 'hours') <= 24)
+      .map(getCorrespondingItem);
 }
 
 async function weWorkRemote(){
